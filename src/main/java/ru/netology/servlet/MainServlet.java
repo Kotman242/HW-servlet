@@ -7,6 +7,7 @@ import ru.netology.service.PostService;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class MainServlet extends HttpServlet {
     private PostController controller;
@@ -24,18 +25,15 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
-        // если деплоились в root context, то достаточно этого
         Thread thread = new Thread(() -> {
             try {
                 final var path = req.getRequestURI();
                 final var method = req.getMethod();
-                // primitive routing
                 if (method.equals(GET) && path.equals(PATH)) {
                     controller.all(resp);
                     return;
                 }
                 if (method.equals(GET) && path.matches(PATH + "/\\d+")) {
-                    // easy way
                     final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
                     controller.getById(id, resp);
                     return;
@@ -45,7 +43,6 @@ public class MainServlet extends HttpServlet {
                     return;
                 }
                 if (method.equals(DELETE) && path.matches(PATH + "/\\d+")) {
-                    // easy way
                     final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
                     controller.removeById(id, resp);
                     return;
@@ -64,3 +61,4 @@ public class MainServlet extends HttpServlet {
         }
     }
 }
+

@@ -4,7 +4,6 @@ public class Post {
     private long id;
     private String content;
 
-
     public Post(long id, String content) {
         this.id = id;
         this.content = content;

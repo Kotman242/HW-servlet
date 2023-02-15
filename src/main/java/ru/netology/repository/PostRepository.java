@@ -1,15 +1,11 @@
 package ru.netology.repository;
 
+import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 // Stub
 public class PostRepository {
@@ -34,9 +30,7 @@ public class PostRepository {
     }
 
     public List<Post> all() {
-        return storage.entrySet().stream()
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
+        return new ArrayList<>(storage.values());
     }
 
     public Optional<Post> getById(long id) {
@@ -47,10 +41,8 @@ public class PostRepository {
     }
 
     public Post save(Post post) {
-        while (storage.containsKey(counter.incrementAndGet())) ;
-        Post post1 = new Post(counter.get(), post.getContent());
-        storage.put(counter.get(), post1);
-        return post1;
+        if(post.getId()==0) return saveNewPost(post);
+        return changePost(post);
     }
 
     public void removeById(long id) {
@@ -61,9 +53,16 @@ public class PostRepository {
         return storage.containsKey(id);
     }
 
-    public Post changePost(Post post){
+    public Post saveNewPost(Post post) {
+        Post newPost = new Post(counter.get(), post.getContent());
+        storage.put(counter.incrementAndGet(), newPost);
+        return  newPost;
+    }
+
+    public Post changePost(Post post) {
+        if(!storage.containsKey(post.getId())) throw new NotFoundException();
         Post newPost = new Post(post.getId(), post.getContent());
-        storage.put(newPost.getId(), newPost);
+        storage.put(post.getId(), newPost);
         return newPost;
     }
 }

@@ -7,7 +7,6 @@ import ru.netology.service.PostService;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.List;
 
 public class PostController {
     public static final String APPLICATION_JSON = "application/json";
@@ -36,6 +35,7 @@ public class PostController {
 
     public void removeById(long id, HttpServletResponse response) throws IOException {
         service.removeById(id);
+        response.getWriter().print("Post №"+id+" deleted");
     }
 
     private<T> void setContentAndPrintPost(T data, HttpServletResponse response) throws IOException {

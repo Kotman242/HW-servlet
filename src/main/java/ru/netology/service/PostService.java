@@ -23,8 +23,7 @@ public class PostService {
     }
 
     public Post save(Post post) {
-        if(post.getId()==0) return repository.save(post);
-        return repository.changePost(post);
+        return repository.save(post);
     }
 
     public void removeById(long id) {
