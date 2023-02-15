@@ -18,7 +18,7 @@ public class PostService {
     }
 
     public Post getById(long id) {
-        if(repository.contain(id)) return repository.getById(id).orElseThrow(NotFoundException::new);
+        if (repository.contain(id)) return repository.getById(id).orElseThrow(NotFoundException::new);
         else throw new NotFoundException();
     }
 
@@ -28,6 +28,6 @@ public class PostService {
 
     public void removeById(long id) {
         if (repository.contain(id)) repository.removeById(id);
-            else throw new NotFoundException();
+        else throw new NotFoundException();
     }
 }
